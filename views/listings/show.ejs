@@ -1,0 +1,457 @@
+<% layout('layouts/boilerplate') %>
+
+<link rel="stylesheet" href="/css/show.css">
+
+<script>
+  window.mapToken = "<%= process.env.MAPBOX_TOKEN %>";
+
+  // ✅ coords must be an ARRAY not a string
+  window.listingCoords = <%- JSON.stringify(list.geometry?.coordinates || [27.1767, 78.0081]) %>;
+
+  // ✅ safe strings
+  window.listingTitle = <%- JSON.stringify(list.title || "Listing Location") %>;
+  window.listingLocationText = <%- JSON.stringify((list.location || "") + ", " + (list.country || "")) %>;
+</script>
+
+<div class="airbnb-page">
+  <div class="airbnb-shell">
+
+    <!-- ================= HEADER ================= -->
+    <header class="airbnb-header">
+      <div class="header-left">
+        <h1 class="airbnb-title"><%= list.title %></h1>
+
+        <div class="airbnb-subline">
+          <span class="sub-location">
+            <i class="fa-solid fa-location-dot"></i>
+            <%= list.location %>, <%= list.country %>
+          </span>
+        </div>
+      </div>
+
+      <% if(list.owner){ %>
+        <div class="airbnb-host">
+          <div class="host-avatar"><%= list.owner.username.charAt(0).toUpperCase() %></div>
+          <div class="host-info">
+            <span class="hosted-by">Hosted by</span>
+            <span class="host-name"><%= list.owner.username %></span>
+          </div>
+        </div>
+      <% } %>
+    </header>
+
+    <!-- ================= HERO IMAGE ================= -->
+    <section class="airbnb-hero">
+      <img
+        src="<%= (typeof list.image === 'string') ? list.image : list.image?.url %>"
+        alt="listing"
+        class="hero-img"
+      />
+    </section>
+
+    <!-- ================= MAIN GRID ================= -->
+    <main class="airbnb-grid">
+
+      <!-- ========== LEFT CONTENT ========== -->
+      <section class="airbnb-left">
+
+        <!-- ===== Price Strip ===== -->
+        <div class="price-card">
+          <div class="price-left">
+            <span class="price-big">&#8377; <%= list.price.toLocaleString("en-IN") %></span>
+            <span class="price-night">/ night</span>
+          </div>
+
+          <% if(currentUser && list.owner && list.owner._id.equals(currentUser._id)){ %>
+            <div class="price-actions">
+              <a href="/listings/<%= list._id %>/edit" class="btn-soft">
+                <i class="fa-solid fa-pen"></i> Edit
+              </a>
+
+              <form action="/listings/<%= list._id %>?_method=DELETE" method="POST">
+                <button class="btn-soft danger" type="submit">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+              </form>
+            </div>
+
+          <% } else if(!currentUser){ %>
+            <!-- ✅ logged out => reserve in left price strip -->
+            <div class="price-actions">
+              <a href="/login?redirect=/listings/<%= list._id %>" class="btn-reserve">Reserve</a>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- ===== About ===== -->
+        <div class="airbnb-section">
+          <h2 class="sec-title">About this place</h2>
+          <p class="sec-text"><%= list.description %></p>
+        </div>
+
+        <!-- ===== Reviews ===== -->
+        <div class="airbnb-section">
+          <div class="reviews-top">
+            <h2 class="sec-title">All Reviews</h2>
+            <span class="review-count"><%= list.reviews.length %> reviews</span>
+          </div>
+
+          <% if(currentUser){ %>
+            <div class="review-form-card">
+              <h3 class="mini-title">Leave a review</h3>
+
+              <form action="/listings/<%= list._id %>/reviews" method="POST" novalidate class="needs-validation">
+
+                <div class="rating-block">
+                  <label class="rating-label">Rating</label>
+
+                  <fieldset class="starability-slot">
+                    <legend class="visually-hidden">Rating</legend>
+
+                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+
+                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                    <label for="first-rate1" title="Terrible">1 star</label>
+
+                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                    <label for="first-rate2" title="Not good">2 stars</label>
+
+                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                    <label for="first-rate3" title="Average">3 stars</label>
+
+                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                    <label for="first-rate4" title="Very good">4 stars</label>
+
+                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                    <label for="first-rate5" title="Amazing">5 stars</label>
+                  </fieldset>
+                </div>
+
+                <div class="mt-3">
+                  <label class="form-label">Comments</label>
+                  <textarea
+                    name="review[comment]"
+                    class="form-control review-textarea"
+                    rows="3"
+                    placeholder="Share your experience..."
+                    required
+                  ></textarea>
+                  <div class="invalid-feedback">Please write a comment.</div>
+                </div>
+
+                <button class="btn-black mt-3" type="submit">Submit Review</button>
+              </form>
+            </div>
+          <% } %>
+
+          <!-- ✅ Review list -->
+          <div class="review-grid">
+            <% if(list.reviews.length === 0){ %>
+              <p class="muted">No reviews yet. Be the first to review!</p>
+            <% } else { %>
+
+              <% list.reviews.forEach(function(review){ %>
+                <div class="review-tile">
+                  <div class="review-head">
+                    <div class="stars">
+                      <% for(let i=0; i<review.rating; i++){ %>⭐<% } %>
+                    </div>
+
+                    <% if(review.author){ %>
+                      <span class="user">@<%= review.author.username %></span>
+                    <% } else { %>
+                      <span class="user">Guest</span>
+                    <% } %>
+                  </div>
+
+                  <p class="review-body"><%= review.comment %></p>
+
+                  <% if(currentUser && review.author && review.author._id.equals(currentUser._id)){ %>
+                    <form action="/listings/<%= list._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                      <button class="btn-mini" type="submit">Delete</button>
+                    </form>
+                  <% } %>
+                </div>
+              <% }); %>
+
+            <% } %>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========== RIGHT SIDE ========== -->
+      <aside class="airbnb-right">
+
+        <!-- ✅ BOOKING CARD (only logged in non-owner) -->
+        <% if(currentUser && (!list.owner || !list.owner._id.equals(currentUser._id))){ %>
+
+          <div class="booking-card">
+            <div class="booking-header">
+              <div class="price-display">
+                <span class="price-amount">&#8377; <%= list.price.toLocaleString("en-IN") %></span>
+                <span class="price-unit">night</span>
+              </div>
+            </div>
+
+            <form action="/bookings/<%= list._id %>/book" method="POST" class="booking-form" id="bookingForm">
+
+              <div class="date-inputs">
+                <div class="input-group date-input-group">
+                  <label for="checkIn">Check-in</label>
+                  <input type="date" id="checkIn" name="checkIn" required min="<%= new Date().toISOString().split('T')[0] %>">
+                </div>
+
+                <div class="input-group date-input-group">
+                  <label for="checkOut">Check-out</label>
+                  <input type="date" id="checkOut" name="checkOut" required min="<%= new Date().toISOString().split('T')[0] %>">
+                </div>
+              </div>
+
+              <div class="input-group guests-container">
+                <label for="guests">Guests</label>
+                <select id="guests" name="guests" required>
+                  <% for(let i=1; i<=10; i++){ %>
+                    <option value="<%= i %>"><%= i %> guest<%= i > 1 ? 's' : '' %></option>
+                  <% } %>
+                </select>
+              </div>
+
+              <!-- ✅ hidden total price -->
+              <input type="hidden" name="totalPrice" id="hiddenTotalPrice">
+
+              <!-- ✅ Price details -->
+              <div class="price-details" id="priceDetails" style="display: none;">
+                <div class="price-details-header">
+                  <span class="price-details-total">Total: ₹<span id="totalAmount">0</span></span>
+                  <button type="button" class="price-details-toggle" id="toggleDetails">Price details</button>
+                </div>
+
+                <div class="price-details-expanded" id="expandedDetails" style="display: none;">
+                  <div class="price-row">
+                    <span>₹<%= list.price.toLocaleString("en-IN") %> × <span id="nightsCount">0</span> nights</span>
+                    <span id="subtotal">₹0</span>
+                  </div>
+
+                  <div class="price-row">
+                    <span>Service fee</span>
+                    <span id="serviceFee">₹0</span>
+                  </div>
+
+                  <div class="price-row total-row">
+                    <span>Total</span>
+                    <span id="finalTotal">₹0</span>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-book" id="bookBtn" disabled>
+                Book Now
+              </button>
+            </form>
+          </div>
+
+        <% } %>
+
+        <!-- ===== MAP CARD ===== -->
+        <div class="map-card">
+          <div class="map-head">
+            <h3 class="map-title">Where you’ll be</h3>
+            <p class="map-location"><%= list.location %>, <%= list.country %></p>
+          </div>
+
+          <div id="map"></div>
+
+          <div class="map-foot">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Exact location will be provided after booking.</span>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/map.js"></script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  const checkInInput = document.getElementById('checkIn');
+  const checkOutInput = document.getElementById('checkOut');
+  const guestsSelect = document.getElementById('guests');
+  const bookBtn = document.getElementById('bookBtn');
+  const priceDetails = document.getElementById('priceDetails');
+  const toggleDetailsBtn = document.getElementById('toggleDetails');
+  const expandedDetails = document.getElementById('expandedDetails');
+
+  const nightsCount = document.getElementById('nightsCount');
+  const subtotalEl = document.getElementById('subtotal');
+  const serviceFeeElement = document.getElementById('serviceFee');
+  const totalAmount = document.getElementById('totalAmount');
+  const finalTotal = document.getElementById('finalTotal');
+  const hiddenTotalPrice = document.getElementById('hiddenTotalPrice');
+
+  const bookingForm = document.getElementById('bookingForm');
+
+  const listingPrice = Number("<%= list.price %>");
+  const listingId = "<%= list._id %>";
+  let bookedDates = [];
+
+  // ✅ parse date safely
+  function parseDate(dateString) {
+    if (!dateString) return null;
+
+    // yyyy-mm-dd
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      const [y, m, d] = dateString.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    // dd-mm-yyyy
+    if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+      const [d, m, y] = dateString.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    const fallback = new Date(dateString);
+    return isNaN(fallback.getTime()) ? null : fallback;
+  }
+
+  function showConflictMessage(message) {
+    let conflictMsg = document.querySelector('.date-conflict-message');
+    if (!conflictMsg) {
+      conflictMsg = document.createElement('div');
+      conflictMsg.className = 'date-conflict-message';
+      document.querySelector('.date-inputs').appendChild(conflictMsg);
+    }
+    conflictMsg.textContent = message;
+    conflictMsg.style.display = 'block';
+  }
+
+  function hideConflictMessage() {
+    const conflictMsg = document.querySelector('.date-conflict-message');
+    if (conflictMsg) conflictMsg.style.display = 'none';
+  }
+
+  async function loadBookedDates() {
+    try {
+      const response = await fetch('/bookings/listings/' + listingId + '/booked-dates');
+      bookedDates = await response.json();
+    } catch (error) {
+      console.error('Error loading booked dates:', error);
+    }
+  }
+
+  function hasDateConflict(checkInDateStr, checkOutDateStr) {
+    const start = parseDate(checkInDateStr);
+    const end = parseDate(checkOutDateStr);
+    if (!start || !end) return false;
+
+    let current = new Date(start);
+    while (current < end) {
+      const iso = current.toISOString().split('T')[0]; // yyyy-mm-dd
+      if (bookedDates.includes(iso)) return true;
+      current.setDate(current.getDate() + 1);
+    }
+    return false;
+  }
+
+  function toggleDetails() {
+    if (!expandedDetails) return;
+
+    const isOpen = expandedDetails.style.display === "block";
+    expandedDetails.style.display = isOpen ? "none" : "block";
+    toggleDetailsBtn.textContent = isOpen ? "Price details" : "Hide details";
+  }
+
+  function calculatePrice() {
+    if(!checkInInput || !checkOutInput || !bookBtn) return;
+
+    priceDetails.style.display = 'none';
+    expandedDetails.style.display = "none";
+    toggleDetailsBtn.textContent = "Price details";
+
+    bookBtn.disabled = true;
+    bookBtn.textContent = 'Reserve';
+
+    const checkInValue = checkInInput.value;
+    const checkOutValue = checkOutInput.value;
+
+    if (!checkInValue || !checkOutValue) {
+      hideConflictMessage();
+      return;
+    }
+
+    const checkIn = parseDate(checkInValue);
+    const checkOut = parseDate(checkOutValue);
+
+    if (!checkIn || !checkOut) {
+      showConflictMessage('Invalid date format. Please select valid dates.');
+      return;
+    }
+
+    if (checkOut <= checkIn) {
+      showConflictMessage('Check-out must be after check-in date');
+      return;
+    }
+
+    if (!listingPrice || isNaN(listingPrice)) {
+      showConflictMessage("Listing price invalid.");
+      return;
+    }
+
+    if (hasDateConflict(checkInValue, checkOutValue)) {
+      showConflictMessage('Selected dates include unavailable dates.');
+      return;
+    }
+
+    hideConflictMessage();
+
+    const nights = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
+    const subtotal = nights * listingPrice;
+    const serviceFee = Math.round(subtotal * 0.14);
+    const total = subtotal + serviceFee;
+
+    // update UI
+    nightsCount.textContent = nights;
+    subtotalEl.textContent = '₹' + subtotal.toLocaleString('en-IN');
+    serviceFeeElement.textContent = '₹' + serviceFee.toLocaleString('en-IN');
+
+    totalAmount.textContent = total.toLocaleString('en-IN');
+    finalTotal.textContent = '₹' + total.toLocaleString('en-IN');
+
+    hiddenTotalPrice.value = total;
+
+    priceDetails.style.display = 'block';
+    bookBtn.disabled = false;
+    bookBtn.textContent = 'Book Now • ₹' + total.toLocaleString('en-IN');
+  }
+
+  // listeners
+  if(checkInInput) checkInInput.addEventListener('change', calculatePrice);
+  if(checkOutInput) checkOutInput.addEventListener('change', calculatePrice);
+  if(guestsSelect) guestsSelect.addEventListener('change', calculatePrice);
+
+  if(toggleDetailsBtn) toggleDetailsBtn.addEventListener('click', toggleDetails);
+
+  if(bookingForm){
+    bookingForm.addEventListener('submit', function(e){
+      // force calc before submit
+      calculatePrice();
+      const val = hiddenTotalPrice.value;
+
+      if(!val || isNaN(Number(val))){
+        e.preventDefault();
+        showConflictMessage("Total price not calculated. Please reselect dates.");
+      }
+    });
+  }
+
+  // start
+  loadBookedDates();
+});
+</script>

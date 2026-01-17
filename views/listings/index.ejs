@@ -1,0 +1,96 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="listing-page">
+
+  <div class="container listing-wrap">
+
+    <!-- ✅ Heading -->
+    <div class="listing-head">
+      <% if(search && search.trim().length > 0){ %>
+        <h2 class="listing-title">
+          Results for "<%= search %>"
+        </h2>
+        <p style="margin-top:8px; color:#717171; font-weight:800;">
+          <%= listings.length %> stays found
+          <a href="/listings" style="margin-left:12px; text-decoration:none; font-weight:900; color:#ff385c;">
+            Clear search
+          </a>
+        </p>
+      <% } else { %>
+        <p style="margin-top:8px; color:#717171; font-weight:800;">
+          Explore unique stays across the world 🌍
+        </p>
+      <% } %>
+    </div>
+
+    <!-- ✅ No Results Found -->
+    <% if(listings.length === 0){ %>
+      <div style="padding:70px 0; text-align:center;">
+        <h3 style="font-weight:1000; font-size:27px; margin-bottom:12px;">
+          No results found
+        </h3>
+        <p style="color:#717171; font-weight:800; font-size:15px;">
+          We couldn't find any listings for "<%= search || "" %>"
+        </p>
+        <a href="/listings"
+           style="display:inline-block; margin-top:14px; padding:10px 16px;
+           border-radius:999px; background:#ff385c; color:white; text-decoration:none;
+           font-weight:1000;">
+          Back to all listings
+        </a>
+      </div>
+
+    <% } else { %>
+
+      <!-- ✅ Listing Cards -->
+      <div class="listing-grid">
+        <% for (let listing of listings) { %>
+
+          <a href="/listings/<%= listing._id %>" class="listing-card-link">
+
+            <article class="air-card">
+
+              <!-- image -->
+              <div class="air-imgbox">
+                <img
+                  src="<%= (typeof listing.image === 'string') ? listing.image : listing.image?.url %>"
+                  alt="listing"
+                />
+
+                <!-- wishlist icon (UI only) -->
+                <button class="air-heart" type="button" title="Save">
+                  <i class="fa-regular fa-heart"></i>
+                </button>
+              </div>
+
+              <!-- content -->
+              <div class="air-meta">
+
+                <div class="air-line1">
+                  <h6 class="air-place" title="<%= listing.title %>">
+                    <%= listing.title %>
+                  </h6>
+                </div>
+
+                <p class="air-loc">
+                  <%= listing.location %>, <%= listing.country %>
+                </p>
+
+                <p class="air-price">
+                  <strong>&#8377; <%= listing.price.toLocaleString("en-IN") %></strong>
+                  <span class="per-night"> / night</span>
+                </p>
+
+              </div>
+
+            </article>
+
+          </a>
+
+        <% } %>
+      </div>
+
+    <% } %>
+
+  </div>
+</div>

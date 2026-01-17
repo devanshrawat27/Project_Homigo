@@ -1,0 +1,282 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="create-page">
+  <div class="create-shell">
+
+    <!-- ✅ Header -->
+    <div class="create-header">
+      <h1>Create new listing</h1>
+      <p>Share your place with guests — add a title, description, photos and location.</p>
+    </div>
+
+    <!-- ✅ Form Card -->
+    <div class="create-card">
+      <form action="/listings" method="POST"
+            class="needs-validation"
+            enctype="multipart/form-data"
+            novalidate>
+
+        <!-- Title -->
+        <div class="form-group">
+          <label class="form-label" for="title">Title</label>
+          <input type="text" id="title" name="listing[title]" placeholder="Eg: Cozy Beachfront Cottage"
+                 class="form-control input-air" required>
+          <div class="invalid-feedback">Please provide a valid title.</div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="description">Description</label>
+          <textarea id="description" name="listing[description]"
+                    placeholder="Tell guests what makes your place special..."
+                    class="form-control textarea-air" rows="5" required></textarea>
+          <div class="invalid-feedback">Please provide a valid description.</div>
+        </div>
+
+        <!-- Price -->
+        <div class="form-group">
+          <label class="form-label" for="price">Price per night (₹)</label>
+          <div class="input-icon-wrap">
+            <span class="icon">₹</span>
+            <input type="number" id="price" name="listing[price]" placeholder="1500"
+                   class="form-control input-air with-icon" required>
+          </div>
+          <div class="invalid-feedback">Please provide a valid price.</div>
+        </div>
+
+        <!-- Image -->
+        <div class="form-group">
+          <label class="form-label" for="image">Upload photo</label>
+
+          <div class="upload-box">
+            <input type="file" id="image" name="listing[image]" class="form-control upload-air" required>
+            <div class="upload-hint">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>Choose a nice cover photo (jpg/png)</span>
+            </div>
+          </div>
+
+          <div class="invalid-feedback">Please upload an image.</div>
+        </div>
+
+        <!-- Location + Country -->
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="location">Location</label>
+            <input type="text" id="location" name="listing[location]" placeholder="Eg: Dehradun"
+                   class="form-control input-air" required>
+            <div class="invalid-feedback">Please provide a valid location.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="country">Country</label>
+            <input type="text" id="country" name="listing[country]" placeholder="Eg: India"
+                   class="form-control input-air" required>
+            <div class="invalid-feedback">Please provide a valid country.</div>
+          </div>
+        </div>
+
+        <!-- Action -->
+        <button type="submit" class="btn-create">
+          <i class="fa-solid fa-plus"></i> Publish listing
+        </button>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- ✅ CSS in same file -->
+<style>
+  :root{
+    --text:#222;
+    --muted:#717171;
+    --line:#ebebeb;
+    --soft:#f7f7f7;
+    --bg:#fff;
+    --accent:#ff385c;
+    --shadow: 0 14px 35px rgba(0,0,0,0.08);
+    --radius: 18px;
+    --radius2: 14px;
+    --font: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+
+  .create-page{
+    width: 100%;
+    padding: 28px 10px 50px;
+    background: #fff;
+    font-family: var(--font);
+  }
+
+  .create-shell{
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  /* ✅ Header */
+  .create-header{
+    margin-top: 10px;
+    margin-bottom: 18px;
+  }
+
+  .create-header h1{
+    font-size: 2rem;
+    font-weight: 1000;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .create-header p{
+    margin: 0;
+    color: var(--muted);
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  /* ✅ Card */
+  .create-card{
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ✅ Groups */
+  .form-group{
+    margin-bottom: 16px;
+  }
+
+  .form-label{
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+
+  /* ✅ Inputs */
+  .input-air{
+    border-radius: var(--radius2);
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    font-weight: 700;
+    transition: 0.2s ease;
+  }
+
+  .input-air:focus{
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(255,56,92,0.12);
+  }
+
+  .textarea-air{
+    border-radius: var(--radius2);
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    font-weight: 700;
+    resize: vertical;
+    transition: 0.2s ease;
+  }
+
+  .textarea-air:focus{
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(255,56,92,0.12);
+  }
+
+  /* ✅ Price icon */
+  .input-icon-wrap{
+    position: relative;
+  }
+
+  .input-icon-wrap .icon{
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 1000;
+    color: var(--muted);
+  }
+
+  .input-air.with-icon{
+    padding-left: 36px;
+  }
+
+  /* ✅ Upload box */
+  .upload-box{
+    border: 1px dashed #d9d9d9;
+    border-radius: var(--radius2);
+    padding: 14px;
+    background: #fafafa;
+    transition: 0.2s ease;
+  }
+
+  .upload-box:hover{
+    border-color: var(--accent);
+    background: #fff;
+  }
+
+  .upload-air{
+    border-radius: 12px;
+    border: 1px solid #eaeaea;
+    font-weight: 700;
+  }
+
+  .upload-hint{
+    margin-top: 10px;
+    color: var(--muted);
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+  }
+
+  .upload-hint i{
+    color: var(--accent);
+    font-size: 1.1rem;
+  }
+
+  /* ✅ Grid */
+  .grid-2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* ✅ Button */
+  .btn-create{
+    width: 100%;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 1000;
+    padding: 12px 16px;
+    border-radius: 999px;
+    transition: 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+  }
+
+  .btn-create:hover{
+    background: #e61e4d;
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(255,56,92,0.25);
+  }
+
+  /* ✅ Responsive */
+  @media(max-width: 768px){
+    .create-card{
+      padding: 18px;
+    }
+    .grid-2{
+      grid-template-columns: 1fr;
+    }
+    .create-header h1{
+      font-size: 1.6rem;
+    }
+  }
+</style>

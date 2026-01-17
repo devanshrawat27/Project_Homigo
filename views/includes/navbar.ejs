@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-lg border-bottom sticky-top homigo-nav">
+  <div class="container-fluid homigo-nav-container">
+
+    <!-- LEFT: Brand -->
+    <a class="navbar-brand homigo-brand" href="/listings">
+      <span class="homigo-name">Homigo</span>
+    </a>
+
+    <!-- MOBILE TOGGLER -->
+    <button class="navbar-toggler homigo-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <!-- ✅ CENTER: Search destinations only -->
+      <form class="homigo-search mx-lg-auto my-3 my-lg-0" action="/listings" method="GET" autocomplete="off">
+
+        <!-- ✅ pill -->
+        <div class="homigo-search-pill homigo-search-single" id="searchPill">
+
+          <!-- ✅ INPUT -->
+          <input
+            id="destinationInput"
+            type="text"
+            name="search"
+            class="homigo-search-input"
+            placeholder="Search destinations"
+            autocomplete="off"
+          />
+
+          <!-- ✅ Search Icon -->
+          <button class="pill-icon" type="submit" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+
+        </div>
+
+        <!-- ✅ Dropdown Suggestions -->
+        <div id="searchDropdown" class="homigo-search-dropdown"></div>
+
+      </form>
+
+      <!-- RIGHT -->
+      <div class="ms-lg-auto d-flex align-items-center homigo-auth">
+        <a class="nav-link homigo-host-link" href="/listings/new">Become a host</a>
+
+        <!-- Profile menu -->
+        <div class="homigo-profile dropdown">
+          <button class="homigo-profile-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-bars"></i>
+            <i class="fa-regular fa-user"></i>
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-end homigo-drop">
+            <% if(!currentUser){ %>
+              <li><a class="dropdown-item" href="/signup"><strong>Sign up</strong></a></li>
+              <li><a class="dropdown-item" href="/login">Log in</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/listings">Explore</a></li>
+            <% } else { %>
+              <li><span class="dropdown-item-text"><strong>@<%= currentUser.username %></strong></span></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/listings/new">Create a listing</a></li>
+              <li><a class="dropdown-item" href="/bookings/my">My bookings</a></li>
+              <li><a class="dropdown-item" href="/bookings/host">Host dashboard</a></li>
+              <li>
+                <form method="POST" action="/logout" class="d-inline">
+                  <button type="submit" class="dropdown-item text-danger">Log out</button>
+                </form>
+              </li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>

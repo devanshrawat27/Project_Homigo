@@ -1,0 +1,107 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="booking-page">
+  <div class="container booking-wrap">
+
+    <!-- Header -->
+    <div class="booking-head">
+      <h2 class="booking-title">My Bookings</h2>
+      <p class="booking-subtitle">Manage your upcoming and past stays</p>
+    </div>
+
+    <!-- No bookings -->
+    <% if(bookings.length === 0){ %>
+      <div class="no-bookings">
+        <div class="no-bookings-icon">
+          <i class="fa-solid fa-calendar-xmark"></i>
+        </div>
+        <h3>No bookings yet</h3>
+        <p>You haven't made any bookings. Start exploring amazing places!</p>
+        <a href="/listings" class="btn-explore">Explore Listings</a>
+      </div>
+    <% } else { %>
+
+      <!-- Bookings Grid -->
+      <div class="bookings-grid">
+        <% bookings.forEach(booking => { %>
+          <div class="booking-card">
+            <% if(booking.listing){ %>
+              <div class="booking-image">
+                <img
+                  src="<%= (typeof booking.listing.image === 'string') ? booking.listing.image : booking.listing.image?.url %>"
+                  alt="<%= booking.listing.title %>"
+                />
+              </div>
+
+              <div class="booking-content">
+                <h3 class="booking-listing-title"><%= booking.listing.title %></h3>
+                <p class="booking-location">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <%= booking.listing.location %>, <%= booking.listing.country %>
+                </p>
+            <% } else { %>
+              <div class="booking-image deleted">
+                <div class="deleted-listing-icon">
+                  <i class="fa-solid fa-house-circle-xmark"></i>
+                </div>
+              </div>
+
+              <div class="booking-content">
+                <h3 class="booking-listing-title deleted">Listing No Longer Available</h3>
+                <p class="booking-location deleted">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  This listing has been removed by the host
+                </p>
+            <% } %>
+
+              <div class="booking-dates">
+                <div class="date-item">
+                  <span class="date-label">Check-in</span>
+                  <span class="date-value"><%= booking.checkIn.toLocaleDateString() %></span>
+                </div>
+                <div class="date-item">
+                  <span class="date-label">Check-out</span>
+                  <span class="date-value"><%= booking.checkOut.toLocaleDateString() %></span>
+                </div>
+              </div>
+
+              <div class="booking-guests">
+                <i class="fa-solid fa-users"></i>
+                <%= booking.guests %> guest<%= booking.guests > 1 ? 's' : '' %>
+              </div>
+
+              <div class="booking-price">
+                <span class="price-label">Total Price</span>
+                <span class="price-value">&#8377; <%= booking.totalPrice.toLocaleString("en-IN") %></span>
+              </div>
+
+              <div class="booking-status">
+                <% if(booking.status === 'pending'){ %>
+                  <span class="status pending">Pending Host Approval</span>
+                <% } else if(booking.status === 'approved'){ %>
+                  <% const today = new Date(); today.setHours(0,0,0,0); %>
+                  <% if(booking.checkOut < today){ %>
+                    <span class="status completed">Completed</span>
+                  <% } else if(booking.checkIn <= today){ %>
+                    <span class="status active">Active</span>
+                  <% } else { %>
+                    <span class="status approved">Approved</span>
+                    <form action="/bookings/<%= booking._id %>?_method=DELETE" method="POST" class="cancel-form" onsubmit="return confirm('Are you sure you want to cancel this booking?')">
+                      <button type="submit" class="btn-cancel">Cancel Booking</button>
+                    </form>
+                  <% } %>
+                <% } else if(booking.status === 'rejected'){ %>
+                  <span class="status rejected">Rejected</span>
+                <% } else if(booking.status === 'cancelled'){ %>
+                  <span class="status cancelled">Cancelled</span>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+    <% } %>
+
+  </div>
+</div>

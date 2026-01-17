@@ -1,0 +1,376 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="edit-page">
+
+  <!-- ✅ Page Wrapper -->
+  <div class="edit-wrap">
+
+    <!-- ✅ Heading -->
+    <div class="edit-head">
+      <h1>Edit your listing</h1>
+      <p>Update your property details and keep your listing fresh ✨</p>
+    </div>
+
+    <!-- ✅ Card -->
+    <div class="edit-card">
+
+      <!-- ✅ Form -->
+      <form method="POST"
+            action="/listings/<%= listing._id %>?_method=PUT"
+            class="needs-validation edit-form"
+            enctype="multipart/form-data"
+            novalidate>
+
+        <!-- ================= Title ================= -->
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input
+            type="text"
+            name="listing[title]"
+            class="form-control homigo-input"
+            value="<%= listing.title %>"
+            required
+          />
+          <div class="invalid-feedback">Please provide a valid title.</div>
+        </div>
+
+        <!-- ================= Description ================= -->
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea
+            name="listing[description]"
+            class="form-control homigo-input homigo-textarea"
+            required
+          ><%= listing.description %></textarea>
+          <div class="invalid-feedback">Please provide a valid description.</div>
+        </div>
+
+        <!-- ================= Current Image Preview ================= -->
+        <div class="image-preview-block">
+          <label class="form-label">Current Image</label>
+
+          <div class="image-preview-box">
+            <img src="<%= original %>" alt="Current Image" />
+            <span class="image-badge">Current</span>
+          </div>
+        </div>
+
+        <!-- ================= Upload New ================= -->
+        <div class="form-group">
+          <label class="form-label">Upload New Image (Optional)</label>
+
+          <input
+            id="newImageInput"
+            type="file"
+            name="listing[image]"
+            class="form-control homigo-input"
+            accept="image/*"
+          />
+
+          <small class="small-muted">Leave blank to keep current image.</small>
+
+          <!-- ✅ New image preview -->
+          <div id="newPreview" class="new-preview d-none">
+            <p class="preview-title">New uploaded image preview</p>
+            <img id="newPreviewImg" src="" alt="New Preview" />
+          </div>
+        </div>
+
+        <!-- ================= 3 Column Row ================= -->
+        <div class="grid-3">
+
+          <!-- Price -->
+          <div class="form-group">
+            <label class="form-label">Price (per night)</label>
+            <input
+              type="number"
+              name="listing[price]"
+              class="form-control homigo-input"
+              value="<%= listing.price %>"
+              required
+            />
+            <div class="invalid-feedback">Please provide a valid price.</div>
+          </div>
+
+          <!-- Location -->
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input
+              type="text"
+              name="listing[location]"
+              class="form-control homigo-input"
+              value="<%= listing.location %>"
+              required
+            />
+            <div class="invalid-feedback">Please provide a valid location.</div>
+          </div>
+
+          <!-- Country -->
+          <div class="form-group">
+            <label class="form-label">Country</label>
+            <input
+              type="text"
+              name="listing[country]"
+              class="form-control homigo-input"
+              value="<%= listing.country %>"
+              required
+            />
+            <div class="invalid-feedback">Please provide a valid country.</div>
+          </div>
+
+        </div>
+
+        <!-- ================= Buttons ================= -->
+        <div class="btn-row">
+          <button type="submit" class="btn-save">
+            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+          </button>
+
+          <a href="/listings/<%= listing._id %>" class="btn-cancel">
+            Cancel
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ✅ CSS + JS in same file -->
+<style>
+  :root{
+    --accent:#ff385c;
+    --text:#222;
+    --muted:#717171;
+    --line:#eee;
+    --soft:#f7f7f7;
+    --shadow: 0 12px 30px rgba(0,0,0,0.08);
+    --shadow2: 0 6px 18px rgba(0,0,0,0.08);
+    --radius: 18px;
+    --radius2: 14px;
+    --font: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+
+  body{
+    font-family: var(--font);
+    background:#fff;
+    color:var(--text);
+  }
+
+  /* ✅ Page container */
+  .edit-page{
+    padding: 42px 18px 80px;
+  }
+
+  .edit-wrap{
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  /* ✅ header */
+  .edit-head{
+    margin-bottom: 18px;
+  }
+  .edit-head h1{
+    font-size: 2.2rem;
+    font-weight: 1000;
+    letter-spacing: -0.7px;
+    margin: 0 0 6px;
+  }
+  .edit-head p{
+    margin:0;
+    color:var(--muted);
+    font-weight: 800;
+  }
+
+  /* ✅ card */
+  .edit-card{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background:#fff;
+    box-shadow: var(--shadow);
+    padding: 22px;
+  }
+
+  .edit-form{
+    display:flex;
+    flex-direction:column;
+    gap: 18px;
+  }
+
+  /* ✅ group */
+  .form-group{
+    display:flex;
+    flex-direction:column;
+    gap: 8px;
+  }
+
+  .form-label{
+    font-weight: 1000;
+    font-size: 0.95rem;
+  }
+
+  .small-muted{
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  /* ✅ input style */
+  .homigo-input{
+    border-radius: var(--radius2);
+    border: 1px solid #e6e6e6;
+    padding: 12px 14px;
+    font-weight: 800;
+    transition: 0.2s ease;
+  }
+
+  .homigo-input:focus{
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.2rem rgba(255,56,92,0.18);
+  }
+
+  .homigo-textarea{
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  /* ✅ grid row */
+  .grid-3{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  /* ✅ image preview */
+  .image-preview-block{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+  }
+
+  .image-preview-box{
+    position: relative;
+    border-radius: var(--radius);
+    overflow:hidden;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow2);
+    background:#f1f1f1;
+    max-width: 520px;
+  }
+
+  .image-preview-box img{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display:block;
+  }
+
+  .image-badge{
+    position:absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(0,0,0,0.55);
+    color:#fff;
+    font-weight:1000;
+    font-size: 0.85rem;
+    padding: 7px 12px;
+    border-radius: 999px;
+  }
+
+  /* ✅ new image preview */
+  .new-preview{
+    margin-top: 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    padding: 12px;
+    background:#fff;
+    box-shadow: var(--shadow2);
+    max-width: 520px;
+  }
+
+  .preview-title{
+    margin: 0 0 10px;
+    font-weight: 1000;
+    color: var(--muted);
+  }
+
+  #newPreviewImg{
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+  }
+
+  .d-none{ display:none; }
+
+  /* ✅ button row */
+  .btn-row{
+    display:flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .btn-save{
+    border:none;
+    background: var(--accent);
+    color:#fff;
+    font-weight: 1000;
+    padding: 12px 18px;
+    border-radius: 999px;
+    transition: 0.2s ease;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+  }
+
+  .btn-save:hover{
+    background:#e61e4d;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(255,56,92,0.25);
+  }
+
+  .btn-cancel{
+    text-decoration:none;
+    border:1px solid #ddd;
+    background:#fff;
+    color:#111;
+    font-weight: 1000;
+    padding: 12px 18px;
+    border-radius: 999px;
+    transition: 0.2s ease;
+  }
+
+  .btn-cancel:hover{
+    background: var(--soft);
+    border-color:#111;
+  }
+
+  /* ✅ responsive */
+  @media(max-width: 768px){
+    .grid-3{ grid-template-columns: 1fr; }
+    .edit-card{ padding: 16px; }
+    .image-preview-box img{ height: 220px; }
+  }
+</style>
+
+<script>
+  // ✅ New image preview
+  const fileInput = document.getElementById("newImageInput");
+  const previewBox = document.getElementById("newPreview");
+  const previewImg = document.getElementById("newPreviewImg");
+
+  if(fileInput){
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if(!file){
+        previewBox.classList.add("d-none");
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      previewImg.src = url;
+      previewBox.classList.remove("d-none");
+    });
+  }
+</script>

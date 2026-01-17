@@ -1,0 +1,276 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="auth-page">
+  <div class="auth-shell">
+
+    <!-- ✅ Card -->
+    <div class="auth-card">
+
+      <!-- Header -->
+      <div class="auth-head">
+        <h1>Sign up</h1>
+        <p>Create your account on <span>Homigo</span> to book your perfect stay.</p>
+      </div>
+
+      <!-- Form -->
+      <form action="/signup" method="POST" class="needs-validation" novalidate>
+
+        <!-- Username -->
+        <div class="auth-group">
+          <label for="username" class="auth-label">Username</label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            placeholder="Choose a username"
+            class="form-control auth-input"
+            required
+          />
+          <div class="invalid-feedback">Please provide a valid username.</div>
+        </div>
+
+        <!-- Email -->
+        <div class="auth-group">
+          <label for="email" class="auth-label">Email</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            class="form-control auth-input"
+            required
+          />
+          <div class="invalid-feedback">Please provide a valid email.</div>
+        </div>
+
+        <!-- Password -->
+        <div class="auth-group">
+          <label for="password" class="auth-label">Password</label>
+
+          <div class="pass-wrap">
+            <input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Create a strong password"
+              class="form-control auth-input pass-input"
+              required
+            />
+            <button type="button" class="pass-toggle" aria-label="Toggle password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+
+          <div class="invalid-feedback">Please provide a valid password.</div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="auth-btn">
+          <i class="fa-solid fa-user-plus"></i>
+          Sign up
+        </button>
+
+        <!-- Footer -->
+        <div class="auth-foot">
+          <span>Already have an account?</span>
+          <a href="/login">Log in</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ CSS in same file -->
+<style>
+  :root{
+    --text:#222;
+    --muted:#717171;
+    --line:#ebebeb;
+    --soft:#f7f7f7;
+    --bg:#fff;
+    --accent:#ff385c;
+    --shadow: 0 16px 40px rgba(0,0,0,0.10);
+    --radius: 18px;
+    --radius2: 14px;
+    --font: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+
+  .auth-page{
+    min-height: calc(100vh - 120px);
+    display: grid;
+    place-items: center;
+    padding: 40px 14px;
+    background: #fff;
+    font-family: var(--font);
+  }
+
+  .auth-shell{
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .auth-card{
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ✅ Header */
+  .auth-head{
+    margin-bottom: 18px;
+  }
+
+  .auth-head h1{
+    font-size: 1.9rem;
+    font-weight: 1000;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin: 0 0 6px;
+  }
+
+  .auth-head p{
+    margin: 0;
+    color: var(--muted);
+    font-weight: 800;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  .auth-head p span{
+    color: var(--accent);
+    font-weight: 1000;
+  }
+
+  /* ✅ Inputs */
+  .auth-group{
+    margin-bottom: 14px;
+  }
+
+  .auth-label{
+    font-weight: 1000;
+    color: var(--text);
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .auth-input{
+    border-radius: var(--radius2);
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    font-weight: 800;
+    transition: 0.2s ease;
+  }
+
+  .auth-input:focus{
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(255,56,92,0.12);
+  }
+
+  /* ✅ Password toggle */
+  .pass-wrap{
+    position: relative;
+  }
+
+  .pass-input{
+    padding-right: 48px;
+  }
+
+  .pass-toggle{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 36px;
+    width: 36px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .pass-toggle:hover{
+    background: var(--soft);
+    border-color: #ddd;
+  }
+
+  .pass-toggle i{
+    color: #444;
+    font-size: 0.95rem;
+  }
+
+  /* ✅ Button */
+  .auth-btn{
+    width: 100%;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 1000;
+    padding: 12px 16px;
+    border-radius: 999px;
+    transition: 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+
+  .auth-btn:hover{
+    background: #e61e4d;
+    transform: translateY(-1px);
+    box-shadow: 0 18px 34px rgba(255,56,92,0.25);
+  }
+
+  /* ✅ Footer */
+  .auth-foot{
+    margin-top: 16px;
+    text-align: center;
+    font-weight: 900;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .auth-foot a{
+    margin-left: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 1000;
+  }
+
+  .auth-foot a:hover{
+    text-decoration: underline;
+  }
+
+  @media(max-width: 480px){
+    .auth-card{
+      padding: 18px;
+    }
+    .auth-head h1{
+      font-size: 1.6rem;
+    }
+  }
+</style>
+
+<!-- ✅ JS for password toggle -->
+<script>
+  const toggleBtn = document.querySelector(".pass-toggle");
+  const passInput = document.querySelector("#password");
+
+  if(toggleBtn && passInput){
+    toggleBtn.addEventListener("click", () => {
+      const isHidden = passInput.type === "password";
+      passInput.type = isHidden ? "text" : "password";
+      toggleBtn.innerHTML = isHidden
+        ? '<i class="fa-solid fa-eye-slash"></i>'
+        : '<i class="fa-solid fa-eye"></i>';
+    });
+  }
+</script>
