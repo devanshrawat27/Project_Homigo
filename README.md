@@ -1,4 +1,4 @@
-# 🏡 Project Homigo — Stay Booking & Property Listing Platform (MVC)
+# 🏡 Homigo — Stay Booking & Property Listing Platform (MVC)
 
 <div align="center">
 
@@ -15,15 +15,15 @@
 
 ## 📌 Overview
 
-**Project Homigo** is a full-stack stay booking and property listing web platform built using **Node.js, Express, MongoDB Atlas, and EJS**, following the **MVC architecture**.  
-It provides a smooth workflow for users to browse listings, view properties on maps, create listings, manage bookings, and share reviews — with complete authentication and role-based access.
+**Homigo** is a modern full-stack web platform for discovering and hosting stays.  
+It provides a complete workflow for **property listings, map-based location viewing, bookings, and reviews**, built with **Node.js, Express, MongoDB Atlas, EJS**, and structured using the **MVC architecture**.
+
+The project focuses on clean backend design, secure authentication, and a smooth booking flow with owner-controlled approvals.
 
 ---
 
-
 ## 🚀 Live Demo
-🔗 **Project Homigo (Render):** https://project-homigo-fcsq.onrender.com/listings
-
+🔗 **Homigo (Render):** https://project-homigo-fcsq.onrender.com/listings
 
 ---
 
