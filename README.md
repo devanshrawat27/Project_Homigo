@@ -232,10 +232,8 @@ This app is deployed as a **Web Service** on [Render](https://render.com):
 
 ## 👨‍💻 Author
 
-**[Your Name]**
-- 🔗 Portfolio: *(add your portfolio link)*
-- 💼 LinkedIn: *(add your LinkedIn)*
-- 🐙 GitHub: *(add your GitHub profile link)*
+**[Devansh Rawat]**
+
 
 ---
 
