@@ -27,7 +27,7 @@
 
 ## 📌 What is Homigo?
 
-**Homigo** is a production-ready, full-stack web application inspired by Airbnb — built to demonstrate real-world backend engineering skills. It supports the **complete lifecycle of a stay booking platform**: listing properties, discovering stays, managing bookings with approval workflows, writing reviews, and visualizing locations on an interactive map.
+**Homigo** is a production-ready, full-stack web application for discovering and hosting stays. It supports the **complete lifecycle of a stay booking platform**: listing properties, managing bookings with approval workflows, writing reviews, and visualizing locations on an interactive map.
 
 > Built with **Node.js + Express**, backed by **MongoDB Atlas**, and deployed live on **Render** — this project showcases MVC architecture, REST API design, cloud integrations, and secure authentication in a real production environment.
 
@@ -230,32 +230,18 @@ This app is deployed as a **Web Service** on [Render](https://render.com):
 
 ---
 
-## ✅ Future Enhancements
-
-- [ ] Payment integration (Stripe / Razorpay)
-- [ ] Real-time booking notifications (Socket.io)
-- [ ] Advanced search filters (price range, amenities, dates)
-- [ ] Admin panel for platform management
-- [ ] Email confirmations for booking status updates
-- [ ] Mobile-responsive improvements & PWA support
-- [ ] Unit & integration tests (Jest / Mocha)
-
----
-
 ## 👨‍💻 Author
 
 **[Your Name]**
-- 🔗 Portfolio: [your-portfolio-link.com](#)
-- 💼 LinkedIn: [linkedin.com/in/your-profile](#)
-- 🐙 GitHub: [github.com/your-username](#)
+- 🔗 Portfolio: *(add your portfolio link)*
+- 💼 LinkedIn: *(add your LinkedIn)*
+- 🐙 GitHub: *(add your GitHub profile link)*
 
 ---
 
 ## ⭐ Support
 
 If you found this project helpful or interesting, please consider giving it a **star** — it motivates me to keep building! 🙌
-
-[![GitHub stars](https://img.shields.io/github/stars/YOUR_USERNAME/Project_Homigo?style=social)](https://github.com/YOUR_USERNAME/Project_Homigo)
 
 ---
 
